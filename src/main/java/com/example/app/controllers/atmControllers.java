@@ -34,7 +34,7 @@ public class atmControllers {
 		);
 	}
 
-	@ApiOperation(value = "LISTA MOV POR ID CLIENTE", notes="")
+	@ApiOperation(value = "LISTA MOV POR ID CAJERO", notes="")
 	@GetMapping("/{id}")
 	public Mono<ResponseEntity<Atm>> viewId(@PathVariable String id) {
 		return bankService.findByIdAtm(id)
@@ -49,13 +49,34 @@ public class atmControllers {
 		return bankService.saveAtm(cliente);
 	}
 	
-	@ApiOperation(value = "GUARDA MOV", notes="")
-	@PostMapping
-	public Mono<Atm> guardarCliente(@RequestBody Atm bank) {
-			return bankService.saveAtm(bank);
+	@ApiOperation(value = "GUARDA MOV DEPOSITOS", notes="")
+	@PostMapping("/deposito")
+	public Mono<Atm> guardarMovDepo(@RequestBody Atm atm) {
+			return bankService.saveAtmDeposito(atm);
 
 	}
 	
+	@ApiOperation(value = "GUARDA MOV DEPOSITOS", notes="")
+	@PostMapping("/retiro")
+	public Mono<Atm> guardarMovRet(@RequestBody Atm atm) {
+			return bankService.saveAtmRetiro(atm);
+
+	}
+	
+	@ApiOperation(value = "GUARDA MOV CUENTA A CUENTA", notes="")
+	@PostMapping("/transferencia")
+	public Mono<Atm> guardarMovTransf(@RequestBody Atm atm) {
+			return bankService.saveAtmTranferencias(atm);
+
+	}
+	
+	
+	@ApiOperation(value = "GUARDA MOV CUENTA A CREDITO", notes="")
+	@PostMapping("/pagoCredit")
+	public Mono<Atm> guardarMovPagos(@RequestBody Atm atm) {
+			return bankService.saveAtmPagoCredito(atm);
+
+	}
 	
 	@ApiOperation(value = "ELIMINA MOV", notes="")
 	@DeleteMapping("/{id}")

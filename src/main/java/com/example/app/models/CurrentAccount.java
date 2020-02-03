@@ -15,26 +15,33 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import reactor.core.publisher.Mono;
 
 @Getter
 @Setter
-@ToString
-public class OperationCurrentAccount {
 
+public class CurrentAccount {
+	
+	private String id;
 	private String dni;
-	private String codigo_bancario_origen;
-	private String cuenta_origen;
-	private String codigo_bancario_destino;
-	private String cuenta_destino;
+	private String numero_cuenta;
+	private TypeCurrentAccount tipoProducto;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	private Date fechaOperacion;
-	private TypeOperation tipoOperacion;
-	private double montoPago;
-	private Double comision = 0.0;
-		
+	private Date fecha_afiliacion;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	private Date fecha_caducidad;
+	private double saldo;
+	private String usuario;
+	private String clave;
+	private String codigo_bancario;
+	
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
-	public Date fechaOperacion() {
-		return fechaOperacion;
+	public Date fecha_afiliacion() {
+		return fecha_afiliacion;
+	}
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
+	public Date fecha_caducidad() {
+		return fecha_caducidad;
 	}
 }
 
