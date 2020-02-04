@@ -42,7 +42,7 @@ public class atmControllers {
 				.defaultIfEmpty(ResponseEntity.notFound().build());
 	}
 
-	@ApiOperation(value = "ACTUALIZA BANCO POR ID", notes="")
+	@ApiOperation(value = "ACTUALIZA CAJERO POR ID", notes="")
 	@PutMapping
 	public Mono<Atm> updateClientePersonal(@RequestBody Atm cliente) {
 		System.out.println(cliente.toString());
@@ -67,7 +67,6 @@ public class atmControllers {
 	@PostMapping("/transferencia")
 	public Mono<Atm> guardarMovTransf(@RequestBody Atm atm) {
 			return bankService.saveAtmTranferencias(atm);
-
 	}
 	
 	
