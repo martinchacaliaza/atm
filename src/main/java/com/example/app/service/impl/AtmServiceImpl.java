@@ -56,15 +56,15 @@ public class AtmServiceImpl implements AtmService {
 			Mono<CurrentAccount> produc = WebClient.builder()
 					.baseUrl("http://" + valorget + "/producto_bancario/api/ProductoBancario/")
 					.defaultHeader(HttpHeaders.CONTENT_TYPE).build().get()
-					.uri("/numero_cuenta/" + atm.getCuenta_origen() + "/" + atm.getCodigo_bancario_origen()).retrieve()
+					.uri("/numero_cuenta/" + atm.getCuentaOrigen() + "/" + atm.getCodigoBancarioOrigen()).retrieve()
 					.bodyToMono(CurrentAccount.class).log();
 			return produc.flatMap(prod -> {
 
-				if (!prod.getCodigo_bancario().equalsIgnoreCase(atm.getCodigo_bancario_origen())) {
+				if (!prod.getCodigoBancario().equalsIgnoreCase(atm.getCodigoBancarioOrigen())) {
 					throw new RequestException("El numeor de cuenta no "
 							+ " pertenece a entidad bancaria ingresada");
 				} else {
-					if (!prod.getCodigo_bancario().equalsIgnoreCase(atm.getCodigo_atm_banco())) {
+					if (!prod.getCodigoBancario().equalsIgnoreCase(atm.getCodigo_atm_banco())) {
 
 						if (atm.getCodigo_atm_banco().equalsIgnoreCase("123")) {
 							atm.setComision_interbancaria(1.50);
@@ -77,11 +77,11 @@ public class AtmServiceImpl implements AtmService {
 				}
 				OperationCurrentAccount coa = new OperationCurrentAccount();
 				coa.setDni(a.getDni());
-				coa.setCodigo_bancario_origen(a.getCodigo_bancario_origen());
-				coa.setCuenta_origen(a.getCuenta_origen());
+				coa.setCodigoBancarioOrigen(a.getCodigoBancarioOrigen());
+				coa.setCuentaOrigen(a.getCuentaOrigen());
 
-				coa.setCodigo_bancario_destino("---");
-				coa.setCuenta_destino("---");
+				coa.setCodigoBancarioDestino("---");
+				coa.setCuentaDestino("---");
 
 				coa.setFechaOperacion(a.getFechaOperacion());
 				coa.setMontoPago(a.getSoles());
@@ -116,15 +116,15 @@ public class AtmServiceImpl implements AtmService {
 			Mono<CurrentAccount> produc = WebClient.builder()
 					.baseUrl("http://" + valorget + "/producto_bancario/api/ProductoBancario/")
 					.defaultHeader(HttpHeaders.CONTENT_TYPE).build().get()
-					.uri("/numero_cuenta/" + atm.getCuenta_origen() + "/" + atm.getCodigo_bancario_origen()).retrieve()
+					.uri("/numero_cuenta/" + atm.getCuentaOrigen() + "/" + atm.getCodigoBancarioOrigen()).retrieve()
 					.bodyToMono(CurrentAccount.class).log();
 			return produc.flatMap(prod -> {
 
-				if (!prod.getCodigo_bancario().equalsIgnoreCase(atm.getCodigo_bancario_origen())) {
+				if (!prod.getCodigoBancario().equalsIgnoreCase(atm.getCodigoBancarioOrigen())) {
 					throw new RequestException("El numeor de cuenta no "
 							+ " pertenece a entidad bancaria ingresada");
 				} else {
-					if (!prod.getCodigo_bancario().equalsIgnoreCase(atm.getCodigo_atm_banco())) {
+					if (!prod.getCodigoBancario().equalsIgnoreCase(atm.getCodigo_atm_banco())) {
 
 						if (atm.getCodigo_atm_banco().equalsIgnoreCase("123")) {
 							atm.setComision_interbancaria(1.50);
@@ -137,10 +137,10 @@ public class AtmServiceImpl implements AtmService {
 				}
 				OperationCurrentAccount coa = new OperationCurrentAccount();
 				coa.setDni(a.getDni());
-				coa.setCodigo_bancario_origen(a.getCodigo_bancario_origen());
-				coa.setCuenta_origen(a.getCuenta_origen());
-				coa.setCodigo_bancario_destino("---");
-				coa.setCuenta_destino("---");
+				coa.setCodigoBancarioOrigen(a.getCodigoBancarioOrigen());
+				coa.setCuentaOrigen(a.getCuentaOrigen());
+				coa.setCodigoBancarioDestino("---");
+				coa.setCuentaDestino("---");
 				coa.setFechaOperacion(a.getFechaOperacion());
 				coa.setMontoPago(a.getSoles());
 				coa.setComision(a.getComision_interbancaria());
@@ -174,15 +174,15 @@ public class AtmServiceImpl implements AtmService {
 			Mono<CurrentAccount> produc = WebClient.builder()
 					.baseUrl("http://" + valorget + "/producto_bancario/api/ProductoBancario/")
 					.defaultHeader(HttpHeaders.CONTENT_TYPE).build().get()
-					.uri("/numero_cuenta/" + atm.getCuenta_origen() + "/" + atm.getCodigo_bancario_origen()).retrieve()
+					.uri("/numero_cuenta/" + atm.getCuentaOrigen() + "/" + atm.getCodigoBancarioOrigen()).retrieve()
 					.bodyToMono(CurrentAccount.class).log();
 			return produc.flatMap(prod -> {
-				if (!prod.getCodigo_bancario().equalsIgnoreCase(atm.getCodigo_bancario_origen())) {
+				if (!prod.getCodigoBancario().equalsIgnoreCase(atm.getCodigoBancarioOrigen())) {
 
 					throw new RequestException("El numeor de cuenta no "
 							+ " pertenece a entidad bancaria ingresada");
 				} else {
-					if (!prod.getCodigo_bancario().equalsIgnoreCase(atm.getCodigo_atm_banco())) {
+					if (!prod.getCodigoBancario().equalsIgnoreCase(atm.getCodigo_atm_banco())) {
 
 						if (atm.getCodigo_atm_banco().equalsIgnoreCase("123")) {
 							atm.setComision_interbancaria(1.50);
@@ -195,10 +195,10 @@ public class AtmServiceImpl implements AtmService {
 				}
 				OperationCurrentAccount coa = new OperationCurrentAccount();
 				coa.setDni(a.getDni());
-				coa.setCodigo_bancario_origen(a.getCodigo_bancario_origen());
-				coa.setCuenta_origen(a.getCuenta_origen());
-				coa.setCodigo_bancario_destino(a.getCodigo_bancario_destino());
-				coa.setCuenta_destino(a.getCuenta_destino());
+				coa.setCodigoBancarioOrigen(a.getCodigoBancarioOrigen());
+				coa.setCuentaOrigen(a.getCuentaOrigen());
+				coa.setCodigoBancarioDestino(a.getCodigoBancarioDestino());
+				coa.setCuentaDestino(a.getCuentaDestino());
 				coa.setFechaOperacion(a.getFechaOperacion());
 				coa.setMontoPago(a.getSoles());
 				coa.setComision(a.getComision_interbancaria());
@@ -230,16 +230,16 @@ public class AtmServiceImpl implements AtmService {
 				Mono<CurrentAccount> produc = WebClient.builder()
 						.baseUrl("http://" + valorget + "/productos_creditos/api/ProductoCredito/")
 						.defaultHeader(HttpHeaders.CONTENT_TYPE).build().get()
-						.uri("/numero_cuenta/" + atm.getCuenta_origen() + "/" +
-						atm.getCodigo_bancario_origen()).retrieve()
+						.uri("/numero_cuenta/" + atm.getCuentaOrigen() + "/" +
+						atm.getCodigoBancarioOrigen()).retrieve()
 						.bodyToMono(CurrentAccount.class).log();
 				return produc.flatMap(prod -> {
-					if (!prod.getCodigo_bancario().equalsIgnoreCase(atm.getCodigo_bancario_origen())) {
+					if (!prod.getCodigoBancario().equalsIgnoreCase(atm.getCodigoBancarioOrigen())) {
 
 						throw new RequestException("El numero de cuenta no "
 								+ " pertenece a entidad bancaria ingresada");
 					} else {
-						if (!prod.getCodigo_bancario().equalsIgnoreCase(atm.getCodigo_atm_banco())) {
+						if (!prod.getCodigoBancario().equalsIgnoreCase(atm.getCodigo_atm_banco())) {
 
 							if (atm.getCodigo_atm_banco().equalsIgnoreCase("123")) {
 								atm.setComision_interbancaria(1.50);
@@ -252,8 +252,8 @@ public class AtmServiceImpl implements AtmService {
 					}
 					OperationCreditAccount coa = new OperationCreditAccount();
 					coa.setDni(a.getDni());
-					coa.setCodigo_bancario(a.getCodigo_bancario_origen());
-					coa.setNumero_cuenta(a.getCuenta_origen());			
+					coa.setCodigoBancario(a.getCodigoBancarioOrigen());
+					coa.setNumeroCuenta(a.getCuentaOrigen());			
 					coa.setFechaOperacion(a.getFechaOperacion());
 					coa.setMontoPago(a.getSoles());			
 					

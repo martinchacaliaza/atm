@@ -17,10 +17,10 @@ import lombok.ToString;
 public class OperationCurrentAccount {
 
 	private String dni;
-	private String codigo_bancario_origen;
-	private String cuenta_origen;
-	private String codigo_bancario_destino;
-	private String cuenta_destino;
+	private String codigoBancarioOrigen;
+	private String cuentaOrigen;
+	private String codigoBancarioDestino;
+	private String cuentaDestino;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fechaOperacion;
 	private TypeOperation tipoOperacion;

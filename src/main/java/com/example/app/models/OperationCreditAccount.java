@@ -16,9 +16,9 @@ public class OperationCreditAccount {
 	
 	private String dni;
 	
-	private String codigo_bancario;
+	private String codigoBancario;
 	
-	private String numero_cuenta;
+	private String numeroCuenta;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fechaOperacion;
 	

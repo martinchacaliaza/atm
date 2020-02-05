@@ -13,7 +13,7 @@ public class CurrentAccount {
 	
 	private String id;
 	private String dni;
-	private String numero_cuenta;
+	private String numeroCuenta;
 	private TypeCurrentAccount tipoProducto;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date fecha_afiliacion;
@@ -22,7 +22,7 @@ public class CurrentAccount {
 	private double saldo;
 	private String usuario;
 	private String clave;
-	private String codigo_bancario;
+	private String codigoBancario;
 	
 	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
 	public Date fecha_afiliacion() {

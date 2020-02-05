@@ -28,7 +28,8 @@ public class atmControllers {
 	@ApiOperation(value = "LISTA TODOS LOS MOV. EN EL CAJERO", notes="")
 	@GetMapping
 	public Mono<ResponseEntity<Flux<Atm>>> findAll() {
-		return Mono.just(ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8)
+		return Mono.just(ResponseEntity.ok()
+				.contentType(MediaType.APPLICATION_JSON)
 				.body(bankService.findAllAtm())
 
 		);
@@ -38,14 +39,14 @@ public class atmControllers {
 	@GetMapping("/{id}")
 	public Mono<ResponseEntity<Atm>> viewId(@PathVariable String id) {
 		return bankService.findByIdAtm(id)
-				.map(p -> ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(p))
+				.map(p -> ResponseEntity.ok()
+						.contentType(MediaType.APPLICATION_JSON).body(p))
 				.defaultIfEmpty(ResponseEntity.notFound().build());
 	}
 
 	@ApiOperation(value = "ACTUALIZA CAJERO POR ID", notes="")
 	@PutMapping
 	public Mono<Atm> updateClientePersonal(@RequestBody Atm cliente) {
-		System.out.println(cliente.toString());
 		return bankService.saveAtm(cliente);
 	}
 	
@@ -81,12 +82,11 @@ public class atmControllers {
 	@DeleteMapping("/{id}")
 	public Mono<ResponseEntity<Void>> deleteBanco(@PathVariable String id) {
 		return bankService.findByIdAtm(id)
-				.flatMap(s -> {
+				.flatMap(s ->{
 			return bankService.deleteAtm(s).
 					then(Mono.just(new ResponseEntity<Void>(HttpStatus.NO_CONTENT)));
 		}).defaultIfEmpty(new ResponseEntity<Void>(HttpStatus.NO_CONTENT));
 	}
-
 }
 
 
