@@ -17,6 +17,7 @@ public interface AtmService {
 	Mono<Atm> saveAtmRetiro(Atm atm);
 	Mono<Atm> saveAtmTranferencias(Atm atm);
 	Mono<Atm> saveAtmPagoCredito(Atm atm);
+	Mono<Atm> saveAtmPagoCredito2(Atm atm);
 
 	
 }

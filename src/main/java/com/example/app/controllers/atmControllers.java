@@ -64,12 +64,17 @@ public class atmControllers {
 
 	}
 	
-	@ApiOperation(value = "GUARDA MOV CUENTA A CUENTA", notes="")
+	@ApiOperation(value = "GUARDA  CUENTA A CUENTA", notes="")
 	@PostMapping("/transferencia")
 	public Mono<Atm> guardarMovTransf(@RequestBody Atm atm) {
 			return bankService.saveAtmTranferencias(atm);
 	}
 	
+	@ApiOperation(value = "GUARDA  CUENTA A CREDITO", notes="")
+	@PostMapping("/bancacredito")
+	public Mono<Atm> guardarMovTransf2(@RequestBody Atm atm) {
+			return bankService.saveAtmPagoCredito2(atm);
+	}
 	
 	@ApiOperation(value = "GUARDA MOV CUENTA A CREDITO", notes="")
 	@PostMapping("/pagoCredit")

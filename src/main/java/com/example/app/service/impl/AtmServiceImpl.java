@@ -1,16 +1,14 @@
 package com.example.app.service.impl;
 
-import java.awt.datatransfer.FlavorMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import com.example.app.exception.RequestException;
 import com.example.app.models.Atm;
 import com.example.app.models.CurrentAccount;
 import com.example.app.models.OperationCreditAccount;
@@ -60,10 +58,7 @@ public class AtmServiceImpl implements AtmService {
 					.bodyToMono(CurrentAccount.class).log();
 			return produc.flatMap(prod -> {
 
-				if (!prod.getCodigoBancario().equalsIgnoreCase(atm.getCodigoBancarioOrigen())) {
-					throw new RequestException("El numeor de cuenta no "
-							+ " pertenece a entidad bancaria ingresada");
-				} else {
+								 
 					if (!prod.getCodigoBancario().equalsIgnoreCase(atm.getCodigo_atm_banco())) {
 
 						if (atm.getCodigo_atm_banco().equalsIgnoreCase("123")) {
@@ -74,18 +69,15 @@ public class AtmServiceImpl implements AtmService {
 
 						}
 					}
-				}
+				
 				OperationCurrentAccount coa = new OperationCurrentAccount();
 				coa.setDni(a.getDni());
 				coa.setCodigoBancarioOrigen(a.getCodigoBancarioOrigen());
 				coa.setCuentaOrigen(a.getCuentaOrigen());
-
 				coa.setCodigoBancarioDestino("---");
 				coa.setCuentaDestino("---");
-
 				coa.setFechaOperacion(a.getFechaOperacion());
 				coa.setMontoPago(a.getSoles());
-
 				Mono<OperationCurrentAccount> oper1 = WebClient.builder()
 						.baseUrl("http://" + valorget + "/servicio-productos/api/OperCuentasCorrientes/")
 						.defaultHeader(HttpHeaders.CONTENT_TYPE).build().post().uri("/deposito/")
@@ -120,10 +112,7 @@ public class AtmServiceImpl implements AtmService {
 					.bodyToMono(CurrentAccount.class).log();
 			return produc.flatMap(prod -> {
 
-				if (!prod.getCodigoBancario().equalsIgnoreCase(atm.getCodigoBancarioOrigen())) {
-					throw new RequestException("El numeor de cuenta no "
-							+ " pertenece a entidad bancaria ingresada");
-				} else {
+				
 					if (!prod.getCodigoBancario().equalsIgnoreCase(atm.getCodigo_atm_banco())) {
 
 						if (atm.getCodigo_atm_banco().equalsIgnoreCase("123")) {
@@ -134,7 +123,7 @@ public class AtmServiceImpl implements AtmService {
 
 						}
 					}
-				}
+				
 				OperationCurrentAccount coa = new OperationCurrentAccount();
 				coa.setDni(a.getDni());
 				coa.setCodigoBancarioOrigen(a.getCodigoBancarioOrigen());
@@ -177,11 +166,8 @@ public class AtmServiceImpl implements AtmService {
 					.uri("/numero_cuenta/" + atm.getCuentaOrigen() + "/" + atm.getCodigoBancarioOrigen()).retrieve()
 					.bodyToMono(CurrentAccount.class).log();
 			return produc.flatMap(prod -> {
-				if (!prod.getCodigoBancario().equalsIgnoreCase(atm.getCodigoBancarioOrigen())) {
 
-					throw new RequestException("El numeor de cuenta no "
-							+ " pertenece a entidad bancaria ingresada");
-				} else {
+				
 					if (!prod.getCodigoBancario().equalsIgnoreCase(atm.getCodigo_atm_banco())) {
 
 						if (atm.getCodigo_atm_banco().equalsIgnoreCase("123")) {
@@ -190,7 +176,7 @@ public class AtmServiceImpl implements AtmService {
 						} else if (atm.getCodigo_atm_banco().equalsIgnoreCase("456")) {
 							atm.setComision_interbancaria(2.50);
 
-						}
+						
 					}
 				}
 				OperationCurrentAccount coa = new OperationCurrentAccount();
@@ -216,68 +202,112 @@ public class AtmServiceImpl implements AtmService {
 			});
 		});
 	}
-	
-	// 3- Pago de tarjeta credito 
-		@Override
-		public Mono<Atm> saveAtmPagoCredito(Atm atm) {
-			Mono<Atm> oper = Mono.just(atm);
-			return oper.flatMap(a -> {
-				typeOperationAtm type = new typeOperationAtm();
-				type.setIdTipo("4");
-				type.setDescripcion("Pago tarjeta de credito");
-				atm.setTipoOperacion(type);
 
-				Mono<CurrentAccount> produc = WebClient.builder()
-						.baseUrl("http://" + valorget + "/productos_creditos/api/ProductoCredito/")
-						.defaultHeader(HttpHeaders.CONTENT_TYPE).build().get()
-						.uri("/numero_cuenta/" + atm.getCuentaOrigen() + "/" +
-						atm.getCodigoBancarioOrigen()).retrieve()
-						.bodyToMono(CurrentAccount.class).log();
-				return produc.flatMap(prod -> {
-					if (!prod.getCodigoBancario().equalsIgnoreCase(atm.getCodigoBancarioOrigen())) {
+	// 3- Pago UNI de tarjeta credito
+	@Override
+	public Mono<Atm> saveAtmPagoCredito(Atm atm) {
+		Mono<Atm> oper = Mono.just(atm);
+		return oper.flatMap(a -> {
+			typeOperationAtm type = new typeOperationAtm();
+			type.setIdTipo("4");
+			type.setDescripcion("Pago tarjeta de credito");
+			atm.setTipoOperacion(type);
 
-						throw new RequestException("El numero de cuenta no "
-								+ " pertenece a entidad bancaria ingresada");
-					} else {
-						if (!prod.getCodigoBancario().equalsIgnoreCase(atm.getCodigo_atm_banco())) {
+			Mono<CurrentAccount> produc = WebClient.builder()
+					.baseUrl("http://" + valorget + "/productos_creditos/api/ProductoCredito/")
+					.defaultHeader(HttpHeaders.CONTENT_TYPE).build().get()
+					.uri("/numero_cuenta/" + atm.getCuentaOrigen() + "/" + atm.getCodigoBancarioOrigen()).retrieve()
+					.bodyToMono(CurrentAccount.class).log();
+			return produc.flatMap(prod -> {
+			
+					if (!prod.getCodigoBancario().equalsIgnoreCase(atm.getCodigo_atm_banco())) {
 
-							if (atm.getCodigo_atm_banco().equalsIgnoreCase("123")) {
-								atm.setComision_interbancaria(1.50);
+						if (atm.getCodigo_atm_banco().equalsIgnoreCase("123")) {
+							atm.setComision_interbancaria(1.50);
 
-							} else if (atm.getCodigo_atm_banco().equalsIgnoreCase("456")) {
-								atm.setComision_interbancaria(2.50);
-
-							}
+						} else if (atm.getCodigo_atm_banco().equalsIgnoreCase("456")) {
+							atm.setComision_interbancaria(2.50);
 						}
-					}
-					OperationCreditAccount coa = new OperationCreditAccount();
-					coa.setDni(a.getDni());
-					coa.setCodigoBancario(a.getCodigoBancarioOrigen());
-					coa.setNumeroCuenta(a.getCuentaOrigen());			
-					coa.setFechaOperacion(a.getFechaOperacion());
-					coa.setMontoPago(a.getSoles());			
 					
-					Mono<OperationCreditAccount> oper1 = WebClient.builder()
-							.baseUrl("http://" + valorget + "/operaciones_cuentas_creditos/"
-									+ "api/OperCuentasCreditos/")
-							.defaultHeader(HttpHeaders.CONTENT_TYPE).build().post().uri("/pago/")
-							.contentType(MediaType.APPLICATION_JSON).body(BodyInserters.fromValue(coa)).retrieve()
-							.bodyToMono(OperationCreditAccount.class).log();
-					return oper1.flatMap(b -> {
-						if (b.getDni().equals("")) {
-							Mono.empty();
-						}
-						return atmDao.save(atm);
-					});
+				}
+				OperationCreditAccount coa = new OperationCreditAccount();
+				coa.setDni(a.getDni());
+				coa.setCodigoBancario(a.getCodigoBancarioOrigen());
+				coa.setNumeroCuenta(a.getCuentaOrigen());
+				coa.setFechaOperacion(a.getFechaOperacion());
+				coa.setMontoPago(a.getSoles());
+				Mono<OperationCreditAccount> oper1 = WebClient.builder()
+						.baseUrl("http://" + valorget + "/operaciones_cuentas_creditos/" + "api/OperCuentasCreditos/")
+						.defaultHeader(HttpHeaders.CONTENT_TYPE).build().post().uri("/pago/")
+						.contentType(MediaType.APPLICATION_JSON).body(BodyInserters.fromValue(coa)).retrieve()
+						.bodyToMono(OperationCreditAccount.class).log();
+				return oper1.flatMap(b -> {
+					if (b.getDni().equals("")) {
+						Mono.empty();
+					}
+					return atmDao.save(atm);
 				});
 			});
-		}
+		});
+	}
+
+	// 4- Pago de tarjeta credito desde cuenta debito
+	
+	@Transactional
+	@Override
+	public Mono<Atm> saveAtmPagoCredito2(Atm atm) {
+
+		Mono<Atm> oper = Mono.just(atm);
+		return oper.flatMap(a -> {
+			typeOperationAtm type = new typeOperationAtm();
+			type.setIdTipo("5");
+			type.setDescripcion("Pago tarjeta de credito desde debito");
+			atm.setTipoOperacion(type);
+
+			Mono<CurrentAccount> produc = WebClient.builder()
+					.baseUrl("http://" + valorget + "/producto_bancario/api/ProductoBancario/")
+					.defaultHeader(HttpHeaders.CONTENT_TYPE).build().get()
+					.uri("/numero_cuenta/" + atm.getCuentaOrigen() + "/" + atm.getCodigoBancarioOrigen()).retrieve()
+					.bodyToMono(CurrentAccount.class).log();
+
+			return produc.flatMap(prod -> {
+				
+					if (!prod.getCodigoBancario().equalsIgnoreCase(atm.getCodigo_atm_banco())) {
+						if (atm.getCodigo_atm_banco().equalsIgnoreCase("123")) {
+							atm.setComision_interbancaria(1.50);
+						} else if (atm.getCodigo_atm_banco().equalsIgnoreCase("456")) {
+							atm.setComision_interbancaria(2.50);
+						
+					}
+				}
+				OperationCurrentAccount coa = new OperationCurrentAccount();
+				coa.setDni(a.getDni());
+				coa.setCodigoBancarioOrigen(a.getCodigoBancarioOrigen());
+				coa.setCuentaOrigen(a.getCuentaOrigen());
+				coa.setCodigoBancarioDestino(a.getCodigoBancarioDestino());
+				coa.setCuentaDestino(a.getCuentaDestino());
+				coa.setFechaOperacion(a.getFechaOperacion());
+				coa.setMontoPago(a.getSoles());
+				coa.setComision(a.getComision_interbancaria());
+				Mono<OperationCurrentAccount> oper1 = WebClient.builder()
+						.baseUrl("http://" + valorget + "/servicio-productos/api/OperCuentasCorrientes/")
+						.defaultHeader(HttpHeaders.CONTENT_TYPE).build().post().uri("/cuenta_a_credito/")
+						.contentType(MediaType.APPLICATION_JSON).body(BodyInserters.fromValue(coa)).retrieve()
+						.bodyToMono(OperationCurrentAccount.class).log();
+				return oper1.flatMap(b -> {
+					if (b.getDni().equals("")) {
+						Mono.empty();
+					}
+					return atmDao.save(atm);
+				});
+			});
+		});
+	}
 
 	@Override
 	public Mono<Void> deleteAtm(Atm bank) {
 		return atmDao.delete(bank);
 	}
-
 	@Override
 	public Mono<Atm> saveAtm(Atm atm) {
 		// TODO Auto-generated method stub
